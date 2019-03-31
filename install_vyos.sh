@@ -314,6 +314,8 @@ installInitScript(){
                 mkdir -p ${INITSCRIPT_DIR_SRC}
 				cp "${VSRC_ROOT}/systemd/v2ray.service" "${INITSCRIPT_DIR_SRC}/v2ray.service"
 				ln -s "${INITSCRIPT_DIR_SRC}/v2ray.service" "${INITSCRIPT_DIR_DEST}/v2ray.service"
+				sed -i "s|/usr/bin/v2ray|${INSTALL_DEST}|g" "${INITSCRIPT_DIR_SRC}/v2ray.service"
+				sed -i "s|/etc/v2ray|${CONFIG_DIR}|g" "${INITSCRIPT_DIR_SRC}/v2ray.service"
                 systemctl enable v2ray.service
             
         fi
