@@ -247,6 +247,7 @@ stopV2ray(){
 }
 
 startV2ray(){
+	set -x
     if [ -n "${SYSTEMCTL_CMD}" ] && [ -f "${INITSCRIPT_DIR_DEST}/v2ray.service" ]; then
         ${SYSTEMCTL_CMD} start v2ray
     elif [ -n "${SERVICE_CMD}" ] && [ -f "/etc/init.d/v2ray" ]; then
@@ -256,6 +257,7 @@ startV2ray(){
         colorEcho ${YELLOW} "Failed to start V2Ray service."
         return 2
     fi
+	set +x
     return 0
 }
 
