@@ -460,6 +460,7 @@ main(){
         V2RAY_RUNNING=1
         stopV2ray
     fi
+    set -x
     installV2Ray || return $?
     installInitScript || return $?
     if [[ ${V2RAY_RUNNING} -eq 1 ]];then
@@ -468,6 +469,7 @@ main(){
     fi
     colorEcho ${GREEN} "V2Ray ${NEW_VER} is installed."
     rm -rf /tmp/v2ray
+    set +x
     return 0
 }
 
