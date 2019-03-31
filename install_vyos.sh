@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# This file is accessible as https://install.direct/go.sh
-# Original source is located at github.com/v2ray/v2ray-core/release/install-release.sh
+# This file is accessible as https://raw.githubusercontent.com/Tualua/vyos-v2ray/master/install_vyos.sh
 
 # If not specify, default meaning of return value:
 # 0: Success
@@ -247,8 +246,7 @@ stopV2ray(){
 }
 
 startV2ray(){
-	set -x
-    if [ -n "${SYSTEMCTL_CMD}" ] && [ -f "${INITSCRIPT_DIR_DEST}/v2ray.service" ]; then
+	if [ -n "${SYSTEMCTL_CMD}" ] && [ -f "${INITSCRIPT_DIR_DEST}/v2ray.service" ]; then
         ${SYSTEMCTL_CMD} start v2ray
     elif [ -n "${SERVICE_CMD}" ] && [ -f "/etc/init.d/v2ray" ]; then
         ${SERVICE_CMD} v2ray start
@@ -257,7 +255,6 @@ startV2ray(){
         colorEcho ${YELLOW} "Failed to start V2Ray service."
         return 2
     fi
-	set +x
     return 0
 }
 
@@ -315,10 +312,10 @@ installInitScript(){
         if [[ ! -f "${INITSCRIPT_DIR_SRC}/v2ray.service" ]]; then
                 mkdir -p ${INITSCRIPT_DIR_SRC}
 				cp "${VSRC_ROOT}/systemd/v2ray.service" "${INITSCRIPT_DIR_SRC}/v2ray.service"
-				cp "${VSRC_ROOT}/systemd/v2ray.service" "${INITSCRIPT_DIR_DEST}/v2ray.service"
 				sed -i "s|/usr/bin/v2ray|${INSTALL_DEST}|g" "${INITSCRIPT_DIR_SRC}/v2ray.service"
 				sed -i "s|/etc/v2ray|${CONFIG_DIR}|g" "${INITSCRIPT_DIR_SRC}/v2ray.service"
-                systemctl enable v2ray.service
+				cp "${INITSCRIPT_DIR_SRC}/v2ray.service" "${INITSCRIPT_DIR_DEST}/v2ray.service"
+				systemctl enable v2ray.service
             
         fi
         return
