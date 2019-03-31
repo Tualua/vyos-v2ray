@@ -313,7 +313,7 @@ installInitScript(){
         if [[ ! -f "${INITSCRIPT_DIR_SRC}/v2ray.service" ]]; then
                 mkdir -p ${INITSCRIPT_DIR_SRC}
 				cp "${VSRC_ROOT}/systemd/v2ray.service" "${INITSCRIPT_DIR_SRC}/v2ray.service"
-				ln -s "${INITSCRIPT_DIR_SRC}/v2ray.service" "${INITSCRIPT_DIR_DEST}/v2ray.service"
+				cp "${VSRC_ROOT}/systemd/v2ray.service" "${INITSCRIPT_DIR_DEST}/v2ray.service"
 				sed -i "s|/usr/bin/v2ray|${INSTALL_DEST}|g" "${INITSCRIPT_DIR_SRC}/v2ray.service"
 				sed -i "s|/etc/v2ray|${CONFIG_DIR}|g" "${INITSCRIPT_DIR_SRC}/v2ray.service"
                 systemctl enable v2ray.service
@@ -416,7 +416,7 @@ main(){
     if [[ $LOCAL_INSTALL -eq 1 ]]; then
         colorEcho ${YELLOW} "Installing V2Ray via local file. Please make sure the file is a valid V2Ray package, as we are not able to determine that."
         NEW_VER=local
-        installSoftware unzip || return $?
+        #installSoftware unzip || return $?
         rm -rf /tmp/v2ray
         extract $LOCAL || return $?
         #FILEVDIS=`ls /tmp/v2ray |grep v2ray-v |cut -d "-" -f4`
@@ -460,7 +460,6 @@ main(){
         V2RAY_RUNNING=1
         stopV2ray
     fi
-    set -x
     installV2Ray || return $?
     installInitScript || return $?
     if [[ ${V2RAY_RUNNING} -eq 1 ]];then
@@ -469,7 +468,6 @@ main(){
     fi
     colorEcho ${GREEN} "V2Ray ${NEW_VER} is installed."
     rm -rf /tmp/v2ray
-    set +x
     return 0
 }
 
