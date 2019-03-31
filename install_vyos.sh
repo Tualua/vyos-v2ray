@@ -311,8 +311,8 @@ installV2Ray(){
 installInitScript(){
     if [[ -n "${SYSTEMCTL_CMD}" ]];then
         if [[ ! -f "${INITSCRIPT_DIR_SRC}/v2ray.service" ]]; then
-                cp "${VSRC_ROOT}/systemd/v2ray.service" "${INITSCRIPT_DIR_SRC}/"
-				ln -s "${INITSCRIPT_DIR_SRC}/v2ray.service" "{INITSCRIPT_DIR_DEST}/v2ray.service"
+                cp "${VSRC_ROOT}/systemd/v2ray.service" "${INITSCRIPT_DIR_SRC}/v2ray.service"
+				ln -s "${INITSCRIPT_DIR_SRC}/v2ray.service" "${INITSCRIPT_DIR_DEST}/v2ray.service"
                 systemctl enable v2ray.service
             
         fi
