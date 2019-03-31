@@ -234,7 +234,7 @@ getVersion(){
 
 stopV2ray(){
     colorEcho ${BLUE} "Shutting down V2Ray service."
-    if [[ -n "${SYSTEMCTL_CMD}" ]] || [[ -f "/lib/systemd/system/v2ray.service" ]] || [[ -f "/etc/systemd/system/v2ray.service" ]]; then
+    if [[ -n "${SYSTEMCTL_CMD}" ]] || [[ -f "${INITSCRIPT_DIR_DEST}/v2ray.service" ]]; then
         ${SYSTEMCTL_CMD} stop v2ray
     elif [[ -n "${SERVICE_CMD}" ]] || [[ -f "/etc/init.d/v2ray" ]]; then
         ${SERVICE_CMD} v2ray stop
@@ -247,9 +247,7 @@ stopV2ray(){
 }
 
 startV2ray(){
-    if [ -n "${SYSTEMCTL_CMD}" ] && [ -f "/lib/systemd/system/v2ray.service" ]; then
-        ${SYSTEMCTL_CMD} start v2ray
-    elif [ -n "${SYSTEMCTL_CMD}" ] && [ -f "/etc/systemd/system/v2ray.service" ]; then
+    if [ -n "${SYSTEMCTL_CMD}" ] && [ -f "${INITSCRIPT_DIR_DEST}/v2ray.service" ]; then
         ${SYSTEMCTL_CMD} start v2ray
     elif [ -n "${SERVICE_CMD}" ] && [ -f "/etc/init.d/v2ray" ]; then
         ${SERVICE_CMD} v2ray start
@@ -300,8 +298,8 @@ installV2Ray(){
         let PORT=$RANDOM+10000
         UUID=$(cat /proc/sys/kernel/random/uuid)
 
-        sed -i "s/10086/${PORT}/g" "/etc/v2ray/config.json"
-        sed -i "s/23ad6b10-8d1a-40f7-8ad0-e3e35cd38297/${UUID}/g" "/etc/v2ray/config.json"
+        sed -i "s/10086/${PORT}/g" "${CONFIG_DIR}/config.json"
+        sed -i "s/23ad6b10-8d1a-40f7-8ad0-e3e35cd38297/${UUID}/g" "${CONFIG_DIR}/config.json"
 
         colorEcho ${BLUE} "PORT:${PORT}"
         colorEcho ${BLUE} "UUID:${UUID}"
@@ -431,7 +429,7 @@ main(){
         #fi
     else
         # download via network and extract
-        installSoftware "curl" || return $?
+        #installSoftware "curl" || return $? //VyOS already has curl
         getVersion
         RETVAL="$?"
         if [[ $RETVAL == 0 ]] && [[ "$FORCE" != "1" ]]; then
@@ -445,7 +443,7 @@ main(){
         else
             colorEcho ${BLUE} "Installing V2Ray ${NEW_VER} on ${ARCH}"
             downloadV2Ray || return $?
-            installSoftware unzip || return $?
+            #installSoftware unzip || return $? //VyOS already has unzip
             extract ${ZIPFILE} || return $?
         fi
     fi 
